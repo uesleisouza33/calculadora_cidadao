@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Pequeno ajuste para fonte e scroll de tabela */
+        body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+        .table-wrap { max-height: 340px; overflow:auto; }
+      </style>
+    <title>Calculadora do cidadão</title>
+  </head>
+  <body>
+    <body class="bg-gray-50 p-6">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+          <h1 class="text-2xl font-semibold text-gray-800 mb-4">Calculadoras Financeiras</h1>
+      
+          <div class="flex flex-wrap gap-3 mb-6" id="tabs">
+            <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium tab-active" data-tab="fin">Financiamento com prestações fixas</button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-tab="fv">Valor futuro do capital</button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-tab="ann">Aplicação — depósitos regulares</button>
+          </div>
+      
+          <section id="fin" class="panel">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Número de parcelas</label>
+                <input id="numParcelas" type="number" value="36" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Juros mensal (%)</label>
+                <input id="jurosMensal" type="text" value="1" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Valor da parcela (R$)</label>
+                <input id="valorParcela" type="text" value="1500" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+            </div>
+      
+            <div class="flex gap-4 mb-6">
+              <button id="btnCalcularFin" class="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:opacity-95">Calcular</button>
+              <button id="btnLimparFin" class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50">Limpar</button>
+            </div>
+      
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-gray-50 border rounded-lg p-4">
+                <div class="text-xs text-gray-500">Valor financiado (R$)</div>
+                <div id="valorFinanciado" class="text-xl font-medium mt-1">R$ 0,00</div>
+              </div>
+              <div class="bg-gray-50 border rounded-lg p-4">
+                <div class="text-xs text-gray-500">Valor total (R$)</div>
+                <div id="valorTotal" class="text-xl font-medium mt-1">R$ 0,00</div>
+              </div>
+              <div class="bg-gray-50 border rounded-lg p-4">
+                <div class="text-xs text-gray-500">Juros pago (R$)</div>
+                <div id="jurosPago" class="text-xl font-medium mt-1">R$ 0,00</div>
+              </div>
+            </div>
+      
+            <p class="mt-4 text-sm text-gray-500">Baseado em parcelas fixas (sistema francês). Informe a parcela e calcule o valor financiado.</p>
+          </section>
+      
+          <section id="fv" class="panel hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Número de meses</label>
+                <input id="fv-meses" type="number" value="20" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Juros mensal (%)</label>
+                <input id="fv-juros" type="text" value="1" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Depósito (R$)</label>
+                <input id="fv-deposito" type="text" value="200" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+            </div>
+      
+            <div class="flex gap-4 mb-6">
+              <button id="btnCalcularFv" class="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:opacity-95">Calcular</button>
+              <button id="btnLimparFv" class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50">Limpar</button>
+            </div>
+      
+            <div class="mt-4 w-full max-w-sm">
+              <div class="bg-gray-50 border rounded-lg p-4">
+                <div class="text-xs text-gray-500">Resultado</div>
+                <div id="fv-resultado" class="text-xl font-medium mt-1">R$ 0,00</div>
+              </div>
+            </div>
+      
+            <p class="mt-4 text-sm text-gray-500">Fórmula: <code>FV = PV × (1 + i)^n</code> — cresce um depósito único.</p>
+          </section>
+      
+          <section id="ann" class="panel hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Número de meses</label>
+                <input id="ann-meses" type="number" value="20" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Juros mensal (%)</label>
+                <input id="ann-juros" type="text" value="1" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Depósito (R$)</label>
+                <input id="ann-deposito" type="text" value="200" class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-orange-300" />
+              </div>
+            </div>
+      
+            <div class="flex gap-4 mb-6">
+              <button id="btnCalcularAnn" class="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:opacity-95">Calcular</button>
+              <button id="btnLimparAnn" class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50">Limpar</button>
+            </div>
+      
+            <div class="mt-4 w-full max-w-sm">
+              <div class="bg-gray-50 border rounded-lg p-4">
+                <div class="text-xs text-gray-500">Resultado</div>
+                <div id="ann-resultado" class="text-xl font-medium mt-1">R$ 0,00</div>
+              </div>
+            </div>
+      
+            <p class="mt-4 text-sm text-gray-500">Fórmula (depósitos no início do período — anuidade devida): <code>FV = PMT × ((1+i)^n − 1)/i × (1+i)</code></p>
+          </section>
+      
+          <p class="mt-6 text-xs text-gray-500">Observação: as taxas são mensais (por exemplo, insira <strong>1</strong> para 1% ao mês).</p>
+        </div>
+      
+        
+        <script src="./script.js"></script>
+  </body>
+</html>
