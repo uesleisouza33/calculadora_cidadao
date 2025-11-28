@@ -124,4 +124,4 @@ function limparAnn() {
 document
   .getElementById("btnCalcularAnn")
   .addEventListener("click", calcularAnn);
-document.getElementById("btnLimparAnn").addEventListener("click", limparAnn);
+document.getElementById("btnLimparAnn").addEventListener("click", limparAnn); 
